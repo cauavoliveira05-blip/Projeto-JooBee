@@ -1,0 +1,506 @@
+:root{
+  --bee-yellow:#FFB800;
+  --night-hive:#1A1A2E;
+  --ai-violet:#534AB7;
+  --warm-white:#F5F4EF;
+  --honey-dark:#EF9F27;
+  --success-teal:#1D9E75;
+  --danger:#dc3545;
+
+  /* tema (claro por padrão) */
+  --page-bg: var(--warm-white);
+  --page-text: var(--night-hive);
+  --card-bg: #ffffff;
+  --card-text: var(--night-hive);
+  --menu-bg: var(--night-hive);
+  --footer-bg: var(--night-hive);
+  --toast-text: #ffffff;
+  --input-bg: #ffffff;
+  --input-border: #ddd;
+}
+
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:'Segoe UI',sans-serif;
+  background:var(--page-bg);
+  color:var(--page-text);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+body.dark{
+  /* deixa o contorno das imagens mais visível no escuro */
+  --img-border: rgba(255,184,0,.55);
+  --img-border-2: rgba(245,244,239,.35);
+
+  /* tema escuro */
+  --page-bg: #0f1021;
+  --page-text: rgba(255,184,0,.55);
+  --card-bg: #17182f;
+  --card-text: rgba(255,184,0,.55);
+  --menu-bg: #0c0d19;
+  --footer-bg: #0c0d19;
+  --toast-text: rgba(255,184,0,.55);
+  --input-bg: #1f2036;
+  --input-border: rgba(255,184,0,.55);
+}
+
+
+/* ==========================
+   FUNDO COLMEIA
+========================== */
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  opacity:.03;
+  pointer-events:none;
+
+  background-image:
+  radial-gradient(circle at 20px 20px,
+  var(--bee-yellow) 2px,
+  transparent 3px);
+
+  background-size:50px 50px;
+}
+
+/* ==========================
+   MENU HAMBURGUER
+========================== */
+
+#menu-toggle{
+  display:none;
+}
+
+.menu-btn{
+  position:fixed;
+  top:20px;
+  left:20px;
+
+  width:26px;
+  height:20px;
+
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+
+  cursor:pointer;
+  z-index:10000;
+}
+
+.menu-btn span{
+  width:100%;
+  height:3px;
+  border-radius:20px;
+  background:var(--bee-yellow);
+
+  transition:.35s ease;
+}
+
+/* VIRA X */
+
+#menu-toggle:checked + .menu-btn span:nth-child(1){
+  transform:translateY(8.5px) rotate(45deg);
+}
+
+#menu-toggle:checked + .menu-btn span:nth-child(2){
+  opacity:0;
+}
+
+#menu-toggle:checked + .menu-btn span:nth-child(3){
+  transform:translateY(-8.5px) rotate(-45deg);
+}
+
+/* ==========================
+   MENU LATERAL
+========================== */
+
+.nav-links{
+  position:fixed;
+  top:0;
+  left:-280px;
+
+  width:260px;
+  height:100vh;
+
+  list-style:none;
+
+  background:var(--menu-bg);
+
+  padding-top:80px;
+
+  transition:.35s ease;
+
+  box-shadow:8px 0 25px rgba(0,0,0,.25);
+
+  z-index:9999;
+}
+
+
+#menu-toggle:checked ~ .nav-links{
+  left:0;
+}
+
+.nav-links li{
+  width:100%;
+}
+
+.nav-links a{
+  display:block;
+
+  color:white;
+  text-decoration:none;
+
+  padding:18px 25px;
+
+  font-size:1rem;
+
+  transition:.3s;
+}
+
+.nav-links a:hover{
+  background:var(--bee-yellow);
+  color:var(--night-hive);
+}
+
+/* ==========================
+   LOGO SUPERIOR DIREITA
+========================== */
+
+.logo{
+  position:fixed;
+  top:15px;
+  right:20px;
+  z-index:999;
+}
+
+.logo img{
+  height:55px;
+  border-radius:12px;
+  box-shadow:0 5px 20px rgba(0,0,0,.15);
+  border:2px solid rgba(255,184,0,.25);
+}
+
+.logo img#logo-lateral{
+  cursor:pointer;
+}
+
+body.dark .logo img{
+  border-color: var(--img-border);
+  box-shadow:0 5px 20px rgba(0,0,0,.35), 0 0 0 4px rgba(255,184,0,.12);
+}
+
+
+
+
+
+/* ==========================
+   HERO
+========================== */
+
+.hero{
+  text-align:center;
+  margin-top:90px;
+}
+
+.hero img{
+  width:420px;
+  max-width:90%;
+  margin:auto;
+  display:block;
+  border-radius:16px;
+  border:2px solid rgba(255,184,0,.25);
+  box-shadow:0 10px 30px rgba(0,0,0,.12);
+}
+
+body.dark .hero img{
+  border-color: var(--img-border-2);
+  box-shadow:0 10px 30px rgba(0,0,0,.35), 0 0 0 4px rgba(255,184,0,.08);
+}
+
+
+/* ==========================
+   CONTAINER
+========================== */
+
+.container{
+  width:95%;
+  max-width:1100px;
+  margin:35px auto;
+}
+
+.form-card{
+  background:var(--card-bg);
+  color:var(--card-text);
+  border-radius:24px;
+  padding:40px;
+
+  box-shadow:
+  0 15px 40px rgba(0,0,0,.08);
+}
+
+
+.form-card h2{
+  text-align:center;
+  margin-bottom:25px;
+
+  color:var(--card-text);
+
+  font-size:2rem;
+  letter-spacing:-1px;
+}
+
+
+/* ==========================
+   GRID
+========================== */
+
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+}
+
+.full-width{
+  grid-column:1/-1;
+}
+
+.input-group{
+  display:flex;
+  flex-direction:column;
+}
+
+.input-group label{
+  margin-bottom:8px;
+  font-weight:500;
+}
+
+.input-group:has(.radio-group) > label{
+  text-align:center;
+  display:block;
+  width:100%;
+}
+
+.input-group input{
+  padding:14px;
+
+  background:var(--input-bg);
+  color:var(--page-text);
+  border:2px solid var(--input-border);
+
+  border-radius:12px;
+
+  transition:.3s;
+}
+
+
+.input-group input:focus{
+  outline:none;
+
+  border-color:var(--bee-yellow);
+
+  box-shadow:
+  0 0 0 4px rgba(255,184,0,.15);
+}
+
+body.dark .input-group input[readonly]{
+  background: rgba(255,255,255,.03) !important;
+}
+
+
+.radio-group{
+  display:flex;
+  gap:25px;
+  margin-top:8px;
+  justify-content:center;
+  align-items:center;
+  flex-wrap:wrap;
+  width:100%;
+}
+
+.input-group .radio-group{
+  justify-content:center;
+  width:100%;
+}
+
+.error-msg{
+  color:var(--danger);
+  font-size:.8rem;
+  margin-top:4px;
+}
+
+/* ==========================
+   MOSTRAR SENHA
+========================== */
+
+#togglePass{
+  accent-color:var(--bee-yellow);
+}
+
+/* ==========================
+   BOTÕES
+========================== */
+
+.btn-group{
+  display:flex;
+  justify-content:center;
+  gap:15px;
+  flex-wrap:wrap;
+}
+
+button{
+  border:none;
+  cursor:pointer;
+
+  padding:14px 22px;
+
+  border-radius:12px;
+
+  font-weight:500;
+
+  transition:.3s;
+}
+
+.btn-primary{
+  background:var(--bee-yellow);
+  color:var(--night-hive);
+}
+
+.btn-primary:hover{
+  background:var(--honey-dark);
+  transform:translateY(-2px);
+}
+
+.btn-secondary{
+  background:var(--night-hive);
+  color:white;
+}
+
+.btn-secondary:hover{
+  opacity:.9;
+}
+
+.btn-outline{
+  background:white;
+  color:var(--night-hive);
+  border:2px solid var(--night-hive);
+}
+
+.btn-outline:hover{
+  background:var(--night-hive);
+  color:white;
+}
+
+/* ==========================
+   TAGS
+========================== */
+
+.tag{
+  display:inline-block;
+  padding:7px 14px;
+  border-radius:50px;
+  font-size:.85rem;
+  font-weight:500;
+}
+
+.tag-ai{
+  background:var(--ai-violet);
+  color:white;
+}
+
+.tag-open{
+  background:var(--bee-yellow);
+  color:black;
+}
+
+.tag-urgent{
+  background:#dc3545;
+  color:white;
+}
+
+.tag-done{
+  background:var(--success-teal);
+  color:white;
+}
+
+/* ==========================
+   TOAST
+========================== */
+
+#toast-box{
+  position:fixed;
+  top:25px;
+  right:25px;
+
+  padding:14px 22px;
+
+  border-radius:12px;
+
+  color:var(--toast-text);
+
+  transform:translateX(250%);
+
+  transition:.35s;
+
+  z-index:99999;
+}
+
+
+#toast-box.show{
+  transform:translateX(0);
+}
+
+/* ==========================
+   FOOTER
+========================== */
+
+.main-footer{
+  background:var(--footer-bg);
+  color:white;
+
+  text-align:center;
+
+  padding:25px;
+
+  margin-top:50px;
+}
+
+body.dark .main-footer{
+  color:rgba(255,184,0,.55);
+}
+
+
+/* ==========================
+   RESPONSIVO
+========================== */
+
+@media(max-width:768px){
+
+  .hero img{
+    width:260px;
+  }
+
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .btn-group{
+    flex-direction:column;
+  }
+
+  .logo img{
+    height:45px;
+  }
+
+  .menu-btn{
+    width:24px;
+    height:18px;
+  }
+}

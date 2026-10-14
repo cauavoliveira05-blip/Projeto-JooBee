@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="TelaRecuperarSenha JoBee.css">
+  <title>JoBee</title>
+</head>
+<body>
+  <div class="logo">
+    <img id="logo-lateral" src="../logo/logo lateral jpg.jpeg" alt="Logo JoBee" role="button" tabindex="0" />
+  </div>
+
+  <input type="checkbox" id="menu-toggle">
+  <label for="menu-toggle" class="menu-btn">
+    <span></span>
+    <span></span>
+    <span></span>
+  </label>
+
+  <ul class="nav-links">
+    <li><a href="#">Início</a></li>
+    <li><a href="#">Contatos</a></li>
+    <li><a href="../Tela%20de%20Cadastro/TelaCadastro%20JoBee.html">Cadastro</a></li>
+  </ul>
+
+  <div id="toast-box"></div>
+
+  <section class="hero">
+    <img src="../logo/logo central.jpg.jpeg" alt="JoBee">
+  </section>
+
+  <div class="container">
+    <div class="form-card">
+      <h2>Recuperar Senha</h2>
+
+  <form id="recuperarForm">
+        <div class="form-group">
+          <label for="recEmail">E-mail:</label>
+          <input type="email" id="recEmail" required placeholder="seu@email.com">
+          <span id="msgRecEmail" class="error-msg"></span>
+        </div>
+
+        <div id="step2" class="form-block" style="display:block;">
+          <div class="form-group">
+            <label for="newPassword">Nova senha:</label>
+            <input type="password" id="newPassword" required placeholder="8-12 caracteres (maiúscula, minúscula, número, especial)" minlength="8" maxlength="12">
+            <span id="msgNewPassword" class="error-msg"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="confirmNewPassword">Confirmar nova senha:</label>
+            <input type="password" id="confirmNewPassword" required placeholder="Repita a nova senha" minlength="8" maxlength="12">
+            <div class="remember-forgot" style="margin-top:10px;">
+              <label>
+                <input type="checkbox" id="showPassword" checked="false"> Mostrar senha
+              </label>
+            </div>
+            <span id="msgConfirmNewPassword" class="error-msg"></span>
+          </div>
+        </div>
+
+        <div class="btn-group">
+          <button id="btnEnviarRec" type="submit" class="btn-primary">Redefinir senha</button>
+          <button type="reset" class="btn-secondary">Limpar</button>
+        </div>
+
+
+        <div class="signup-link">
+          Lembrou a senha? <a href="../Tela%20de%20Login/TelaLogin%20JoBee.html">Volte para o login</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <footer class="main-footer">
+    <div class="container footer-flex">
+      <div class="footer-copy">
+        <p>&copy; 2026 JoBee. Todos os direitos reservados.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ==========================
+    // TEMA CLARO / ESCURO
+    // ==========================
+    (function () {
+      const body = document.body;
+      const logo = document.getElementById('logo-lateral');
+      if (!logo) return;
+
+      const STORAGE_KEY = 'themeJoBee';
+
+      function setTheme(theme) {
+        body.classList.toggle('dark', theme === 'dark');
+        localStorage.setItem(STORAGE_KEY, theme);
+      }
+
+      function getInitialTheme() {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved === 'dark' || saved === 'light') return saved;
+        return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+          ? 'dark'
+          : 'light';
+      }
+
+      setTheme(getInitialTheme());
+
+      function toggleTheme() {
+        const next = body.classList.contains('dark') ? 'light' : 'dark';
+        setTheme(next);
+      }
+
+      logo.addEventListener('click', toggleTheme);
+      logo.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggleTheme();
+        }
+      });
+    })();
+
+    // ==========================
+    // FECHAR MENU AO CLICAR EM LINK
+    // ==========================
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', () => {
+        document.getElementById('menu-toggle').checked = false;
+      });
+    });
+
+    // ==========================
+    // TOAST
+    // ==========================
+    const toast = document.getElementById("toast-box");
+
+    function showToast(message, isError = true) {
+      toast.textContent = message;
+      toast.style.backgroundColor = isError ? "#dc3545" : "#28a745";
+      toast.classList.add("show");
+
+      setTimeout(() => {
+        toast.classList.remove("show");
+      }, 3000);
+    }
+
+    // ==========================
+    // RECUPERAÇÃO DE SENHA (SIMULAÇÃO FRONT-END)
+    // ==========================
+    const recuperarForm = document.getElementById('recuperarForm');
+
+    const step2 = document.getElementById('step2');
+    const newPasswordInput = document.getElementById('newPassword');
+    const confirmNewPasswordInput = document.getElementById('confirmNewPassword');
+    const showPasswordCheckbox = document.getElementById('showPassword');
+
+    function validarSenha(senha) {
+      if (senha.length < 8 || senha.length > 12) return false;
+      if (!/[A-Z]/.test(senha)) return false;
+      if (!/[a-z]/.test(senha)) return false;
+      if (!/\d/.test(senha)) return false;
+      if (!/[!@#$%^&*()_+\-=\[\]{}`;':",.<>?\\\/]/.test(senha)) return false;
+      return true;
+    }
+
+    if (showPasswordCheckbox && newPasswordInput && confirmNewPasswordInput) {
+      const apply = () => {
+        const t = showPasswordCheckbox.checked ? 'text' : 'password';
+        newPasswordInput.type = t;
+        confirmNewPasswordInput.type = t;
+      };
+      showPasswordCheckbox.addEventListener('change', apply);
+      apply();
+    }
+
+    recuperarForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const recEmailInput = document.getElementById('recEmail');
+      const msgRecEmail = document.getElementById('msgRecEmail');
+
+      const email = recEmailInput.value.trim();
+
+      // limpar validações visuais
+      msgRecEmail.classList.remove('show');
+      msgRecEmail.textContent = '';
+
+      document.getElementById('msgNewPassword').classList.remove('show');
+      document.getElementById('msgNewPassword').textContent = '';
+      document.getElementById('msgConfirmNewPassword').classList.remove('show');
+      document.getElementById('msgConfirmNewPassword').textContent = '';
+
+      const emailOk = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
+      if (!email) {
+        msgRecEmail.textContent = "E-mail é obrigatório.";
+        msgRecEmail.classList.add('show');
+        return;
+      }
+      if (!emailOk) {
+        msgRecEmail.textContent = "E-mail inválido.";
+        msgRecEmail.classList.add('show');
+        return;
+      }
+
+      const newPassword = newPasswordInput.value;
+      const confirmNewPassword = confirmNewPasswordInput.value;
+
+      // Validar senha
+      if (!validarSenha(newPassword)) {
+        const msg = document.getElementById('msgNewPassword');
+        msg.textContent = "Senha deve ter 8-12 caracteres com maiúscula, minúscula, número e caractere especial.";
+        msg.classList.add('show');
+        return;
+      }
+
+      if (newPassword !== confirmNewPassword) {
+        const msg = document.getElementById('msgConfirmNewPassword');
+        msg.textContent = "As senhas não coincidem.";
+        msg.classList.add('show');
+        return;
+      }
+
+      // Atualizar senha no localStorage (simulação)
+      const userDataRaw = localStorage.getItem('cadastroJoBee');
+      let userData = null;
+      try {
+        userData = userDataRaw ? JSON.parse(userDataRaw) : null;
+      } catch (_) {
+        userData = null;
+      }
+
+      // Se houver cadastro e o email bater, atualiza; caso contrário, UX segura
+      if (userData && userData.email && email === userData.email) {
+        userData.senha = newPassword;
+        localStorage.setItem('cadastroJoBee', JSON.stringify(userData));
+      }
+
+      // Limpar após sucesso
+      recuperarForm.reset();
+
+      // Mensagem genérica (conforme requisito)
+      showToast("Senha redefinida com sucesso!", false);
+
+      // Garante estado inicial do checkbox e tipos
+      if (showPasswordCheckbox) showPasswordCheckbox.checked = false;
+      if (newPasswordInput && confirmNewPasswordInput) {
+        newPasswordInput.type = 'password';
+        confirmNewPasswordInput.type = 'password';
+      }
+
+      if (step2) {
+        // mantém visível (fluxo agora é email + redefinir ao mesmo tempo)
+      }
+
+      document.getElementById('msgRecEmail').classList.remove('show');
+      document.getElementById('msgRecEmail').textContent = '';
+    });
+
+  </script>
+</body>
+</html>

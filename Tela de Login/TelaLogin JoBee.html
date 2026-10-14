@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="TelaLogin.css">
+  <title>JoBee</title>
+ </head>
+<body>
+  <div class="logo">
+    <img id="logo-lateral" src="../logo/logo lateral jpg.jpeg" alt="Logo JoBee" role="button" tabindex="0" />
+  </div>
+
+  <input type="checkbox" id="menu-toggle">
+  <label for="menu-toggle" class="menu-btn">
+    <span></span>
+    <span></span>
+    <span></span>
+  </label>
+
+  <ul class="nav-links">
+    <li><a href="#">Início</a></li>
+    <li><a href="#">Contatos</a></li>
+    <li><a href="../Tela%20de%20Cadastro/TelaCadastro%20JoBee.html">Cadastro</a></li>
+  </ul>
+
+  <div id="toast-box"></div>
+
+  <section class="hero">
+    <img src="../logo/logo central.jpg.jpeg" alt="JoBee">
+  </section>
+
+  <div class="container">
+    <div class="form-card">
+      <h2>Login</h2>
+      
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="loginEmail">E-mail ou Usuário:</label>
+          <input type="text" id="loginEmail" required placeholder="seu@email.com ou @usuario">
+          <span id="msgEmail" class="error-msg"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="loginPassword">Senha:</label>
+          <input type="password" id="loginPassword" required minlength="8" maxlength="12" placeholder="Digite sua senha" aria-describedby="msgPassword">
+          <span id="msgPassword" class="error-msg"></span>
+        </div>
+
+        <div class="remember-forgot">
+          <label>
+            <input type="checkbox" id="showPassword" checked="false"> Mostrar senha
+          </label>
+
+          <a
+          href="../Tela%20de%20recupera%C3%A7%C3%A3o%20de%20senha/TelaRecuperarSenha%20JoBee.html">Esqueceu a senha?</a>
+        </div>
+
+
+        <div class="btn-group">
+          <button type="submit" class="btn-primary">Entrar</button>
+          <button type="reset" class="btn-secondary">Limpar</button>
+        </div>
+      </form>
+
+      <div class="signup-link">
+        Não tem conta? <a href="../Tela%20de%20Cadastro/TelaCadastro%20JoBee.html">Crie uma agora</a>
+      </div>
+    </div>
+  </div>
+
+  <footer class="main-footer">
+    <div class="container footer-flex">
+      <div class="footer-copy">
+        <p>&copy; 2026 JoBee. Todos os direitos reservados.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ==========================
+    // TEMA CLARO / ESCURO
+    // ==========================
+    (function () {
+      const body = document.body;
+      const logo = document.getElementById('logo-lateral');
+      if (!logo) return;
+
+      const STORAGE_KEY = 'themeJoBee';
+
+      function setTheme(theme) {
+        body.classList.toggle('dark', theme === 'dark');
+        localStorage.setItem(STORAGE_KEY, theme);
+      }
+
+      function getInitialTheme() {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved === 'dark' || saved === 'light') return saved;
+        return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+          ? 'dark'
+          : 'light';
+      }
+
+      setTheme(getInitialTheme());
+
+      function toggleTheme() {
+        const next = body.classList.contains('dark') ? 'light' : 'dark';
+        setTheme(next);
+      }
+
+      logo.addEventListener('click', toggleTheme);
+      logo.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggleTheme();
+        }
+      });
+    })();
+
+    // ==========================
+    // FECHAR MENU AO CLICAR EM LINK
+    // ==========================
+
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', () => {
+        document.getElementById('menu-toggle').checked = false;
+      });
+    });
+
+    // ==========================
+    // TOAST
+    // ==========================
+    const toast = document.getElementById("toast-box");
+
+    function showToast(message, isError = true) {
+      toast.textContent = message;
+      toast.style.backgroundColor = isError ? "#dc3545" : "#28a745";
+      toast.classList.add("show");
+
+      setTimeout(() => {
+        toast.classList.remove("show");
+      }, 3000);
+    }
+
+    // ==========================
+    // MOSTRAR SENHA
+    // ==========================
+    const showPasswordCheckbox = document.getElementById('showPassword');
+    const passwordInput = document.getElementById('loginPassword');
+
+    if (showPasswordCheckbox && passwordInput) {
+      showPasswordCheckbox.addEventListener('change', () => {
+        passwordInput.type = showPasswordCheckbox.checked ? 'text' : 'password';
+      });
+    }
+
+    // ==========================
+    // LOGIN
+    // ==========================
+    document.getElementById('loginForm').addEventListener('submit', function (e) {
+
+      e.preventDefault();
+
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+
+
+      let isValid = true;
+
+
+      // Limpar mensagens de erro
+      document.getElementById('msgEmail').classList.remove('show');
+      document.getElementById('msgPassword').classList.remove('show');
+
+      // Validar email/usuário
+      if (!email) {
+        document.getElementById('msgEmail').textContent = "E-mail ou usuário é obrigatório.";
+        document.getElementById('msgEmail').classList.add('show');
+        isValid = false;
+      }
+
+      // Validar senha
+      if (!password) {
+        document.getElementById('msgPassword').textContent = "Senha é obrigatória.";
+        document.getElementById('msgPassword').classList.add('show');
+        isValid = false;
+      }
+
+      if (!isValid) return;
+
+      // Recuperar dados do cadastro
+      const userData = JSON.parse(localStorage.getItem('cadastroJoBee'));
+
+      if (!userData) {
+        showToast("Nenhuma conta cadastrada encontrada. Realize o cadastro primeiro.");
+        return;
+      }
+
+      // Validar credenciais - aceita email ou usuário
+      const isEmailValid = email === userData.email || email === userData.usuario;
+      const isPasswordValid = password === userData.senha;
+
+      if (!isEmailValid || !isPasswordValid) {
+        showToast("E-mail/usuário ou senha incorretos.");
+        return;
+      }
+
+      // Salvar dados de login com timestamp
+      const loginData = {
+        usuario: userData.usuario,
+        email: userData.email,
+        loginTime: new Date().toISOString()
+      };
+
+
+      localStorage.setItem('loginJoBee', JSON.stringify(loginData));
+
+      showToast("Login realizado com sucesso!", false);
+
+      setTimeout(() => {
+        window.location.href = "dashboard.html"; // Redirecionar para dashboard ou página principal
+      }, 1500);
+    });
+  </script>
+</body>
+</html>
